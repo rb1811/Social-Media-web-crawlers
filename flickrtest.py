@@ -31,27 +31,33 @@ api_secret = '678c6ca91b73eb23'
 
 flickr = flickrapi.FlickrAPI(api_key, api_secret,format='parsed-json')
 
-resp = flickr.profile.getProfile(user_id='8965562@N02')
+
+resp= flickr.people.findByUsername(username = 'emmerogers')
+userid = resp['user']['nsid']
+print userid
+resp = flickr.profile.getProfile(user_id=userid)
 resp = dict(resp)
-# resp = json.loads(resp.decode('utf-8'))
-
+# resp = json.loads(resp.decode('utf-8')) 45301915@N00
+print resp.keys()
+print resp['stat']
+print resp['profile']
 alldata = []
-data = {
-           "website" :  resp['profile']['website'].encode('ascii','ignore'),
-             "city"  :  resp['profile']['city'].encode('ascii','ignore'),
-        "first_name" :  resp['profile']['first_name'].encode('ascii','ignore'),
-         "last_name" :  resp['profile']['last_name'].encode('ascii','ignore'),
-            # "nsid"  :  resp['profile']['nsid'].encode('ascii','ignore'),
-           "hometown":  resp['profile']['hometown'].encode('ascii','ignore'),
-           "twitter" :  resp['profile']['twitter'].encode('ascii','ignore'),
-         "country" :  resp['profile']['country'].encode('ascii','ignore'),
-        "occupation" :  resp['profile']['occupation'].encode('ascii','ignore')
-        }
+# data = {
+#            "profile_description" :  resp['profile']['profile_description'],
+#                 "city"  :  resp['profile']['city'].encode('ascii','ignore'),
+#         "first_name" :  resp['profile']['first_name'].encode('ascii','ignore'),
+#          "last_name" :  resp['profile']['last_name'].encode('ascii','ignore'),
+#             # "nsid"  :  resp['profile']['nsid'].encode('ascii','ignore'),
+#            "hometown":  resp['profile']['hometown'].encode('ascii','ignore'),
+#            "twitter" :  resp['profile']['twitter'].encode('ascii','ignore'),
+#          "country" :  resp['profile']['country'].encode('ascii','ignore'),
+#         "occupation" :  resp['profile']['occupation'].encode('ascii','ignore')
+#         }
 
 
-print data
+# print data
 
-alldata.append({resp['profile']['nsid'].encode('ascii','ignore'): data})
+alldata.append({resp['profile']['nsid'].encode('ascii','ignore'): resp['profile']})
 g= open('flickrtest.json','w')
 g.write(str(alldata))
 g.close()
