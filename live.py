@@ -32,21 +32,21 @@ class live(scrapy.Spider):
                     temp_data.append(node.extract().encode('ascii','ignore'))
             rows.append(temp_data)
         # ####################################################################################################
-        # stats =  response.css('div.b-profile-stat-main').extract()
-        # html_string2 = stats[0]        
-        # sel2 = Selector(text=html_string2)
+        stats =  response.css('div.b-profile-stat-main').extract()
+        html_string = stats [-1]       
+        sel = Selector(text=html_string)
         
-        # for node in sel2.css('ul *::text'):
-        #     if not node.extract().encode('ascii','ignore').isspace():
-        #         statistics.append(node.extract().encode('ascii','ignore'))
+        for node in sel.css('ul *::text'):
+            if not node.extract().encode('ascii','ignore').isspace():
+                statistics.append(node.extract().encode('ascii','ignore'))
         
-        # print statistics,"\n\n"
         
+
         data = {
         "heading": heading,
         "subheading":subheading,
         "givendetails":rows,
-        # "statistics":statistics
+        "statistics":statistics
         }
         username =  response.url[response.url.find('//')+2:response.url.find('.')]
         yield{
