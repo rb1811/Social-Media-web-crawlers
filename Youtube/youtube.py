@@ -12,12 +12,12 @@ for link in data:
 		r=requests.get(newurl)
 		data={}
 		if r.json()['items']:
-			data['title'] = r.json()['items'][0]['snippet']['title']
-			data['description'] = r.json()['items'][0]['snippet']['description']
-			data['commentCount'] = r.json()['items'][0]['statistics']['commentCount']
-			data['viewCount'] = r.json()['items'][0]['statistics']['viewCount']
-			data['videoCount'] = r.json()['items'][0]['statistics']['videoCount']
-			data['subscriberCount'] = r.json()['items'][0]['statistics']['subscriberCount']
+			data['title'] = r.json()['items'][0]['snippet']['title'].encode('ascii','ignore')
+			data['description'] = r.json()['items'][0]['snippet']['description'].encode('ascii','ignore')
+			data['commentCount'] = r.json()['items'][0]['statistics']['commentCount'].encode('ascii','ignore')
+			data['viewCount'] = r.json()['items'][0]['statistics']['viewCount'].encode('ascii','ignore')
+			data['videoCount'] = r.json()['items'][0]['statistics']['videoCount'].encode('ascii','ignore')
+			data['subscriberCount'] = r.json()['items'][0]['statistics']['subscriberCount'].encode('ascii','ignore')
 			YouTube.append(data)
 g=  open('youtube.json','w')
 for ele in YouTube:
