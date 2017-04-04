@@ -137,9 +137,9 @@ if __name__ == "__main__":
 					if key_count == 6:
 						key_count = 1
 						print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
-						print "The 20 mins delay has started to refresh the keys"
+						print "The 15 mins delay has started to refresh the keys"
 						print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
-						time.sleep(1200)
+						time.sleep(900)
 		        
 				oauth = get_oauth(key_count)
 				username =  link[link.rfind('/')+1:]
@@ -161,7 +161,7 @@ if __name__ == "__main__":
 					"location": r.json()['location'].encode('ascii','ignore')
 					}
 					print "This is the key being used", key_count
-					twitter.append(data)
+					twitter.append({str(username):data})
 	g =  open('twitter.json','w')
 	for ele in twitter:
 		g.write(str(ele)+'\n')

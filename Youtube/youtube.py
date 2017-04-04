@@ -1,4 +1,5 @@
 import requests
+import json
 url='https://www.googleapis.com/youtube/v3/channels?part=brandingSettings%2Csnippet%2Cstatistics&forUsername=&key=AIzaSyBYTyCtQOEKzNnvITgws6t9WMmcVYRtmWc'
 f = open ('all_nodes.txt','r')
 data = f.read()
@@ -18,10 +19,11 @@ for link in data:
 			data['viewCount'] = r.json()['items'][0]['statistics']['viewCount'].encode('ascii','ignore')
 			data['videoCount'] = r.json()['items'][0]['statistics']['videoCount'].encode('ascii','ignore')
 			data['subscriberCount'] = r.json()['items'][0]['statistics']['subscriberCount'].encode('ascii','ignore')
-			YouTube.append(data)
-g=  open('youtube.json','w')
+			YouTube.append({str(user):data})
+g=  open('youtube2.json','w')
 for ele in YouTube:
-	g.write(str(ele)+'\n')
+	json.dump(ele,g)
+	g.write(','+'\n')
 g.close()
 f.close()
 

@@ -62,7 +62,6 @@ api_secret17 = '32154a07aab5e678'
 
 
 key_list=[
-[api_key100,  api_secret100],
 [api_key1,  api_secret1],
 [api_key2,  api_secret2],
 [api_key3,  api_secret3],
@@ -80,7 +79,7 @@ key_list=[
 [api_key15,  api_secret15],
 [api_key16,  api_secret16],
 [api_key17,  api_secret17],
-
+[api_key100,  api_secret100],
 ]
 
 
@@ -111,22 +110,12 @@ key_list=[
 # fli = flickrapi.FlickrAPI(api_key,api_secret,format='json')
 
 flickrdata = []
-f= open('flickrusernames.txt','r')
-data =f.read()
-data =  data.split('\n')
-unknown= []
-# testcount=100
-for link in data:
-    # testcount -=1
-    # if testcount == 0:
-    #     break
-    # # if not 'flickr' in link:
-    #     continue
-    # else:
-    link = link[:-1]
-    print flickrapi_call, "::::" ,link
+f= open('flickr_getnsid.json','r')
+data =json.load(f)
+for i in range(len(data)):
+    print i
     flickrapi_call+=1
-    if flickrapi_call>1798:
+    if flickrapi_call>3599:
         flickrapi_call = 0
         key_count+=1
         if key_count == 18:
@@ -136,23 +125,15 @@ for link in data:
             print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
             time.sleep(900)
 
-    username =  link[link.rfind('/')+1:]
-    username = ''.join(e for e in username if e.isalnum())
-    # print username
     try:
         flickr = flickrapi.FlickrAPI(key_list[key_count][0], key_list[key_count][1],format='parsed-json')
-        resp = flickr.people.findByUsername(username = username)
-        if resp['stat'] == "ok":    
-            userid = resp['user']['nsid']
-            resp = flickr.profile.getProfile(user_id=userid)
-            
-
-            print "This is the key being used", key_count
-            flickrdata.append({  resp['profile']['nsid'].encode('ascii','ignore'): resp['profile']})
+        userid = data[i].values()[0].encode('ascii','ignore')
+        resp = flickr.profile.getProfile(user_id=userid)
+        print "This is the key being used", key_count
+        flickrdata.append({  data[i].keys()[0].encode('ascii','ignore'): resp['profile']})
 
     except Exception:
-        unknown.append(link) # Its an array to store all those urls who are not found
-    # else:
+        pass
         
     
 g= open('flickr_username.json','w')
@@ -161,8 +142,3 @@ for data in flickrdata:
 
 g.close()
 f.close()
-g= open('unknownflicker.txt','w')
-for link in unknown:
-    g.write(str(link)+'\n')    
-g.close()
-print unknown
