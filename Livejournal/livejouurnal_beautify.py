@@ -23,5 +23,6 @@ for i in range(len(data_json)):
 	print i
 g = open('modified_live.json','w')
 for data in data_json:
-	g.write(str(data)+'\n')
+	json.dump(data,g)
+	g.write(','+'\n')
 g.close()

@@ -4,44 +4,82 @@ import json
 flickrapi_call = 0
 key_count  = 0
 
-api_key9 = '56c41279d606ae3eaab92bcdb15bab81'
-api_secret9 = '8ec9b02a2f2ef7fa'
+api_key100 = '2b3b4d7eaf7dd7527e42eebd7b66e5e8'
+api_secret100 = '678c6ca91b73eb23'
 
-api_key1 = 'bce2d6e48622524bd22fc0cb7ab14b69'
-api_secret1 = '9801ec1c2ecda219'
+api_key1 = '0930efb0108ba641e1a9227e3a288711'
+api_secret1 = '9c7fa568e1a1c156'
 
-api_key2 = 'c48f2ea76f8ee62fb89f907c818b832d'
-api_secret2 = 'd9e4c90cb0dab779'
+api_key2 = '27ccfa8191c137ba7cf3caac08df1867'
+api_secret2 = '16f16cb7e9282c06'
 
-api_key3 = '8252ed55681ccb864f8a290b3e9d6514'
-api_secret3 = 'bd3d05814b4f237e'
+api_key3 = '979f430d1a94852bb4b30bcbd3aa4267'
+api_secret3 = '00f656b082ea420b'
 
-api_key4 = 'ae1aced634b44c36ae55ebb1bd49eefa'
-api_secret4 = 'f9836fb70ee23906'
+api_key4 = 'b81f4cb4a57847a472b3dab2c19e64ed'
+api_secret4 = '7a418b250a7dedb0'
 
-api_key5 = 'e849124f2f9de75f83fe135978b802ea'
-api_secret5 = '7c4f0b8bf4513419'
+api_key5 = 'ecdad53eb5ce7696e26794910df42442'
+api_secret5 = 'd8ae6a5ca3da64ee'
 
-api_key6 = '753586005eb97613534335acb108e8da'
-api_secret6 = 'dc370061e25e64a1'
+api_key6 = 'd2ebd8db92be92d8bfa0927c954606cd'
+api_secret6 = 'a9122939c82ad2ef'
 
-api_key7 = 'd4d8834b96d56ded7180782ef2d6e132'
-api_secret7 = '0ca1735df4a55a81'
+api_key7 = '43133ed8c1048410a0fe5e466fef7b49'
+api_secret7 = '7dfe2e8548905b88'
 
-api_key8 = '7cfe7755f9814341deb4bc3693dd48c2'
-api_secret8 = 'e053212bc2d7a913'
+api_key8 = '2a6fa38766181be9dc43dcb7199c8101'
+api_secret8 = '6903c641681f518c'
+
+api_key9 = 'b9e0ab0e506abf9d201c7dd72cbaaeb0'
+api_secret9 = '1abf5f6e360f5942'
+
+api_key10 = 'b993247a26d8d0213aee608924f34ce0'
+api_secret10 = 'ca2f2b4f477649ae'
+
+api_key11 = '7e078136f49c696ed84b0c7e58fb43d4'
+api_secret11 = '9be4f25b1b887e51'
+
+api_key12 = '4b4481899eb31b97beccdc6e4f719bf3'
+api_secret12 = '3ef5cc139ecf794f'
+
+api_key13 = 'cc36816ff9611e73a0ce5a87440f9d5c'
+api_secret13 = 'c2fbf0fc7706e660'
+
+api_key14 = '977b181d7cf823072121ce9b7edcb3f4'
+api_secret14 = 'f3d73f4052b09afe'
+
+api_key15 = 'feabd79fc61e28ace34d1f9c7d2bc7cb'
+api_secret15 = 'd3e87445e822ec53'
+
+api_key16 = 'bf4116363fd8726409207f0e808cc01b'
+api_secret16 = '3e2fe6ca53b5aa53'
+
+api_key17 = '47c279082e9b138d57746d91e6a28c6f'
+api_secret17 = '32154a07aab5e678'
+
 
 key_list=[
-[api_key8,  api_secret8],
-[api_key7,  api_secret7],
-[api_key6,  api_secret6],
-[api_key5,  api_secret5],
-[api_key2,  api_secret2],
 [api_key1,  api_secret1],
+[api_key2,  api_secret2],
 [api_key3,  api_secret3],
+[api_key4,  api_secret4],
+[api_key5,  api_secret5],
+[api_key6,  api_secret6],
+[api_key7,  api_secret7],
+[api_key8,  api_secret8],
 [api_key9,  api_secret9],
-
+[api_key10,  api_secret10],
+[api_key11,  api_secret11],
+[api_key12,  api_secret12],
+[api_key13,  api_secret13],
+[api_key14,  api_secret14],
+[api_key15,  api_secret15],
+[api_key16,  api_secret16],
+[api_key17,  api_secret17],
+[api_key100,  api_secret100],
 ]
+
 
 
 
@@ -83,10 +121,10 @@ for link in data:
         link = link[:-1]
         print flickrapi_call, "::::" ,link
         flickrapi_call+=1
-        if flickrapi_call>3598:
+        if flickrapi_call>3599:
             flickrapi_call = 0
             key_count+=1
-            if key_count == 8:
+            if key_count == 18:
                 key_count = 0
                 print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
                 print "The 30 mins delay has started to refresh the keys"
@@ -114,6 +152,7 @@ for link in data:
             flickrdata.append({  resp['profile']['nsid'].encode('ascii','ignore'): resp['profile']})
 g= open('flickr_nsid.json','w')
 for data in flickrdata:
-    g.write(str(data)+'\n')
+    json.dump(data,g)
+    g.write(','+'\n')
 g.close()
 f.close()

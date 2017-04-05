@@ -3,6 +3,7 @@ import requests
 from requests_oauthlib import OAuth1
 from urlparse import parse_qs
 import time
+import json
 
 twitter_url_count = 0
 key_count = 0
@@ -64,7 +65,7 @@ keys_list=[
 [CONSUMER_KEY3,	CONSUMER_SECRET3,	OAUTH_TOKEN3,	OAUTH_TOKEN_SECRET3],
 [CONSUMER_KEY4,	CONSUMER_SECRET4,	OAUTH_TOKEN4,	OAUTH_TOKEN_SECRET4],
 [CONSUMER_KEY5,	CONSUMER_SECRET5,	OAUTH_TOKEN5,	OAUTH_TOKEN_SECRET5],
-[CONSUMER_KEY6,	CONSUMER_SECRET6,	OAUTH_TOKEN6,	OAUTH_TOKEN_SECRET6]
+[CONSUMER_KEY6,	CONSUMER_SECRET6,	OAUTH_TOKEN6,	OAUTH_TOKEN_SECRET6],
 
 ]
 # def setup_oauth():
@@ -164,6 +165,7 @@ if __name__ == "__main__":
 					twitter.append({str(username):data})
 	g =  open('twitter.json','w')
 	for ele in twitter:
-		g.write(str(ele)+'\n')
+		json.dump(ele,g)
+		g.write(','+'\n')
 	g.close()
 	f.close()

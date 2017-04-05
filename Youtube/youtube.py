@@ -20,7 +20,7 @@ for link in data:
 			data['videoCount'] = r.json()['items'][0]['statistics']['videoCount'].encode('ascii','ignore')
 			data['subscriberCount'] = r.json()['items'][0]['statistics']['subscriberCount'].encode('ascii','ignore')
 			YouTube.append({str(user):data})
-g=  open('youtube2.json','w')
+g=  open('youtube.json','w')
 for ele in YouTube:
 	json.dump(ele,g)
 	g.write(','+'\n')

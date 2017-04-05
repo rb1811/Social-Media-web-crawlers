@@ -138,7 +138,8 @@ for i in range(len(data)):
     
 g= open('flickr_username.json','w')
 for data in flickrdata:
-    g.write(str(data)+'\n')
+    json.dump(data,g)
+    g.write(','+'\n')
 
 g.close()
 f.close()
