@@ -1,3 +1,4 @@
+#This file to parse those flickr urls that end in nsid
 import flickrapi
 import webbrowser
 import json
@@ -82,7 +83,7 @@ key_list=[
 
 
 
-
+#There is no need to autheticate your api keys like Twitter. You can do it without tokens for flickr. Just in case, for future scope, if you need to authenticate your keys then you can uncomment this function and use it 
 # print('Step 1: authenticate')
 
 # # Only do this if we don't have a valid token already
@@ -135,19 +136,8 @@ for link in data:
         flickr = flickrapi.FlickrAPI(key_list[key_count][0], key_list[key_count][1],format='parsed-json')
 
         resp = flickr.profile.getProfile(user_id=str(username))
-        # User not found
+        # If user found then only execute the below code
         if resp['stat'] == "ok":
-            # data ={}
-            # data = {
-            #  "profile_description" :  resp['profile']['profile_description'],
-            #      "city"  :  resp['profile']['city'],
-            # "first_name" :  resp['profile']['first_name'],
-            #  "last_name" :  resp['profile']['last_name'],
-            #    "hometown":  resp['profile']['hometown'],
-            #    "twitter" :  resp['profile']['twitter'],
-            #  "country" :  resp['profile']['country'],
-            # "occupation" :  resp['profile']['occupation']
-            # }
             print "This is the key being used", key_count
             flickrdata.append({  resp['profile']['nsid'].encode('ascii','ignore'): resp['profile']})
 g= open('flickr_nsid.json','w')

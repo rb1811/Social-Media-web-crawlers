@@ -11,7 +11,7 @@ key_count = 0
 twitter= []
 urlcall = "https://api.twitter.com/1.1/users/show.json?screen_name="
 
-####################################################################################
+#################################Create these tokens from your account###################################################
 REQUEST_TOKEN_URL = "https://api.twitter.com/oauth/request_token"
 AUTHORIZE_URL = "https://api.twitter.com/oauth/authorize?oauth_token="
 ACCESS_TOKEN_URL = "https://api.twitter.com/oauth/access_token"
@@ -68,6 +68,12 @@ keys_list=[
 [CONSUMER_KEY6,	CONSUMER_SECRET6,	OAUTH_TOKEN6,	OAUTH_TOKEN_SECRET6],
 
 ]
+
+# If you are using a new key then uncomment this function. You need to obtain the token for every secret key that you generate from your account
+#This function does that for you. 
+
+
+
 # def setup_oauth():
 #     """Authorize your app via identifier."""
 #     Request token
@@ -99,6 +105,8 @@ keys_list=[
 
 
 def get_oauth(keypos):
+	# Uncomment lines 109-112 and comment lines from 113-116 if you any of your keys doesn't have a token. Once you have all the tokens 
+	#that you need to parse your urls you can make it back to as it was
 	# oauth = OAuth1(CONSUMER_KEY,
 	#             client_secret=CONSUMER_SECRET,
 	#             resource_owner_key=OAUTH_TOKEN,
@@ -111,14 +119,17 @@ def get_oauth(keypos):
 
 
 if __name__ == "__main__":
-    # if not OAUTH_TOKEN:
-    #This if part of the logic needs work if fresh keys are used to make it 
-    # fully automated. Else for the time being I am just skipping the if loop
+    # If you are using a new key then line 125 checks if that key has a token to it or not. If not the above function runs and genarate a token
+    # for you. So to do that. Uncomment line 126 and comment line 127. Once you have all the tokens you need revert it back to as the code was. When you opened it. Line 
+    #128 checks if you have key_list and is not empty if its there it skips and starts calling the twitter api one by one using they keys in rotation as long as there is url that needs to 
+    #parsed. There is 15 mins delay in the code to refresh the keys.  
     
+
+    # if not OAUTH_TOKEN:
     if not keys_list:
         token, secret = setup_oauth()
         print "OAUTH_TOKEN: " + token
-        print "OAUTH_TOKEN_SECRET: " + secret
+        print "OAUTH_TOKEN_SECRET: " + secret #The output these two line will produce copy those tokens and paste in the respective keys token values.  You have to do  this process for every new key you generate
         
     else:
     	f = open('all_nodes.txt','r')
@@ -148,6 +159,7 @@ if __name__ == "__main__":
 				print "New Url: ", newurl
 				r = requests.get(url=newurl, auth=oauth)
         		# r = requests.get(url="https://api.twitter.com/1.1/application/rate_limit_status.json?resources=help,users,search,statuses", auth=oauth)
+				#The above requests can be used to get the status of the key. Like how many calls are remaining... Mind that if you want to use this. You have to do it key by key. 
 				data = {}
 				if 'error' not in r.json().keys()[0].encode('ascii','ignore'):
 					data = {

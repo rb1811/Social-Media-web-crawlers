@@ -1,5 +1,7 @@
 import requests
 import json
+# Call this url by appending the proper username after the equal to sign. The key you can get create from your own google account
+# Just follow the API rules to creat a new key 
 url='https://www.googleapis.com/youtube/v3/channels?part=brandingSettings%2Csnippet%2Cstatistics&forUsername=&key=AIzaSyBYTyCtQOEKzNnvITgws6t9WMmcVYRtmWc'
 f = open ('all_nodes.txt','r')
 data = f.read()
@@ -7,12 +9,12 @@ data =  data.split('\n')
 YouTube = []
 for link in data:
 	if 'youtube' in link:
-		user = link[link.rfind('/')+1:]
-		newurl =  url[:url.find('e=')+2]+str(user)+url[url.find('e=')+2:]
-		print newurl
+		user = link[link.rfind('/')+1:] #To strip of the url and find only the username
+		newurl =  url[:url.find('e=')+2]+str(user)+url[url.find('e=')+2:] #Create the new url with the proper username 
+		print newurl #This line can be commented out. Not needed. Its just tells you how many urls have been parsed how many are left
 		r=requests.get(newurl)
 		data={}
-		if r.json()['items']:
+		if r.json()['items']:  #Fetch whatever is needed from the json that the Youtube is providing you
 			data['title'] = r.json()['items'][0]['snippet']['title'].encode('ascii','ignore')
 			data['description'] = r.json()['items'][0]['snippet']['description'].encode('ascii','ignore')
 			data['commentCount'] = r.json()['items'][0]['statistics']['commentCount'].encode('ascii','ignore')
@@ -20,7 +22,7 @@ for link in data:
 			data['videoCount'] = r.json()['items'][0]['statistics']['videoCount'].encode('ascii','ignore')
 			data['subscriberCount'] = r.json()['items'][0]['statistics']['subscriberCount'].encode('ascii','ignore')
 			YouTube.append({str(user):data})
-g=  open('youtube.json','w')
+g=  open('youtube.json','w') #Store it in file.
 for ele in YouTube:
 	json.dump(ele,g)
 	g.write(','+'\n')

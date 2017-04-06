@@ -1,3 +1,6 @@
+#This code should be run after you have scrapped the livejournal users. 
+#Keep the live.json in the same directory where this code is. 
+#This code just converts the live.json and stores it into a new json file which is MongoDB compatible
 import json
 f =  open('live.json','r')
 data_json  =  json.load(f)

@@ -1,3 +1,4 @@
+#This code will scrap all the statistics that appear on the flickr page of that person 
 import scrapy
 import requests
 from scrapy.selector import Selector
@@ -11,7 +12,7 @@ class flickr(scrapy.Spider):
         if 'flickr' in link:
             start_urls.append(link[:-1])
     def parse(self, response):
-        followers,following,photos =0,0,0
+        followers,following,photos =0,0,0 # There is a possibiltiy that some users may not reveal one of these personal information on their homepage or they may not have anything to show. So the default values for any new user are 0s.
         followers_following_call = response.css('div.title-block-content').extract()
         html_string = followers_following_call[0]
         sel =  Selector(text=html_string)

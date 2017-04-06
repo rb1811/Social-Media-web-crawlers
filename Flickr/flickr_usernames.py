@@ -1,3 +1,4 @@
+#This file to parse those flickr urls that end in usersnames
 import flickrapi
 import webbrowser
 import json
@@ -83,7 +84,7 @@ key_list=[
 ]
 
 
-
+#There is no need to autheticate your api keys like Twitter. You can do it without tokens. Just in case for future scope if you need to authenticate then you can uncomment this function and use it 
 # print('Step 1: authenticate')
 
 # # Only do this if we don't have a valid token already
@@ -132,7 +133,7 @@ for i in range(len(data)):
         print "This is the key being used", key_count
         flickrdata.append({  data[i].keys()[0].encode('ascii','ignore'): resp['profile']})
 
-    except Exception:
+    except Exception: #To catch all types of flickr api error
         pass
         
     

@@ -1,3 +1,4 @@
+#This spider scraps the nsid for those flickr users whose urls end with usernames and not nsid because for profile details we need nsid  not usernames
 import scrapy
 import requests
 from scrapy.selector import Selector
