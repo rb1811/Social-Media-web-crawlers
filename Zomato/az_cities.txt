@@ -1,0 +1,10 @@
+Phoenix
+Tucson
+Mesa
+Glendale
+Scottsdale
+Chandler
+Tempe
+Gilbert
+Peoria
+Yuma

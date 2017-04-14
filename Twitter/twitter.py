@@ -132,7 +132,7 @@ if __name__ == "__main__":
         print "OAUTH_TOKEN_SECRET: " + secret #The output these two line will produce copy those tokens and paste in the respective keys token values.  You have to do  this process for every new key you generate
         
     else:
-    	f = open('all_nodes.txt','r')
+    	f = open('twitter_youtube.txt','r')
     	data =  f.read()
     	data  = data.split('\n')
 
@@ -175,7 +175,7 @@ if __name__ == "__main__":
 					}
 					print "This is the key being used", key_count
 					twitter.append({str(username):data})
-	g =  open('twitter.json','w')
+	g =  open('twitter_youtube.json','w')
 	for ele in twitter:
 		json.dump(ele,g)
 		g.write(','+'\n')
