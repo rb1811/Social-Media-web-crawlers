@@ -4,15 +4,38 @@ from selenium import webdriver
 import json
 
 goodreads_url =  'https://www.goodreads.com'
-urlStr =['https://www.goodreads.com/user/5253785-lyn/followers','https://www.goodreads.com/user/6693836-melanie/followers']
-# urlStr ='https://www.goodreads.com/user/6693836-melanie/followers'
+f =  open('test_followers.json', 'r')
+all_data,urlStr = [], []
+for line in f:
+	all_data.append(json.loads(line[:-2]))
+for i in range(len(all_data)):
+	key =  all_data[i].keys()[0]
+	for link in all_data[i][key][0]['user_url']:
+		if goodreads_url+link.encode('ascii','ignore').replace('/show','')+'/followers' not in urlStr: 
+			urlStr.append(goodreads_url+link.encode('ascii','ignore').replace('/show','')+'/followers')
+f.close()
+all_data = []
+# /user/show/5253785-lyn
+print "Number of urls to be scrapped",len(urlStr)
+# urlStr =['https://www.goodreads.com/user/5253785-lyn/followers','https://www.goodreads.com/user/6693836-melanie/followers']
 
-# req = urllib2.Request(url = urlStr)
-# response = urllib2.urlopen(req,timeout=10)
-# content = response.read()
+done_data,done_urls = [], []
+k = open('goodreads_followers.json','r')
+if k:
+	print "Some data is there"
+	for line in k:
+		done_data.append(json.loads(line[:-2]))
+	for i in range(len(done_data)):
+		done_urls.append(done_data[i].keys()[0].encode('ascii','ignore'))
+else:
+	print "No data yet"
+	pass
+k.close()
+done_data =[]
+
 
 def getDriver():
-	print "adfd"
+	print "entered driver function"
 	driver = webdriver.PhantomJS(executable_path='/usr/local/share/phantomjs/bin/phantomjs')
 	urlStr = "https://www.goodreads.com/user/sign_in"
 
@@ -28,11 +51,23 @@ def getDriver():
 	return driver
 
 driver = getDriver()
-followers_dict ={}
-
+followers_dict = []
+count = 1
 for ele in urlStr:
+	text = ele.replace('https://www.goodreads.com','').replace('/followers','')
+	if text[:text.rfind('/')]+'/show'+text[text.rfind('/'):] in done_urls:
+		print "done urlls ", ele
+		continue
+
+	print "**************************"
+	print "count",count
+	print "**************************"
 	followers_list=[]
+
+	print "This the current url being scrapped " , ele
+	
 	driver.get(ele)
+	# response =  requests.get(ele)
 	response = driver.page_source
 	soup = BeautifulSoup(response, "lxml")
 	try:
@@ -51,20 +86,34 @@ for ele in urlStr:
 		for i in range(2,4):	
 			next_page_url = goodreads_url+last_page_url[:last_page_url.find('=')+1]+str(i)
 			print next_page_url
-			driver.get(next_page_url)
-			response = driver.page_source
-			newsoup = BeautifulSoup(response, "lxml")
+			# driver.get(next_page_url)
+			response =  requests.get(ele)
+			# response = driver.page_source
+			newsoup = BeautifulSoup(response.content, "lxml")
 			for link in newsoup.find_all('a', attrs={"rel" : "acquaintance"}):
 				followers_list.append(link['href'])		
 			print len(followers_list)																											
 	else:
 		for link in soup.find_all('a', attrs={"rel" : "acquaintance"}):
 			followers_list.append(link['href'])
-	followers_dict.update({ele:followers_list})
-final_data=[]
-final_data.append(followers_dict)
-f = open ('goodreads_followers.json','w')
-for ele in final_data:
-	json.dump(ele,f)
-	f.write(','+'\n')
-f.close()
+	text = ele.replace('https://www.goodreads.com','').replace('/followers','')
+	followers_dict.append({text[:text.rfind('/')]+'/show'+text[text.rfind('/'):] : followers_list})
+
+	if count == 3:
+		print "Wrrting in batches"
+		count = 1
+		f = open ('goodreads_followers.json','a')
+		for ele in followers_dict:
+			json.dump(ele,f)
+			f.write(','+'\n')
+		f.close()
+		followers_dict = []
+	
+	count+=1
+
+if followers_dict:
+	f = open ('goodreads_followers.json','a')
+	for ele in followers_dict:
+		json.dump(ele,f)
+		f.write(','+'\n')
+	f.close()

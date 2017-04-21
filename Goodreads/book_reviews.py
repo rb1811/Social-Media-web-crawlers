@@ -35,31 +35,42 @@ for i in range(len(book_data)):
 g.close()
 # urlStr =['https://www.goodreads.com/book/show/8866920-the-breakout-novelist?from_search=true']
 print "No of books to be scraped:",len(urlStr)
-# 'https://www.goodreads.com/book/show/27862725-primeval-origins'
 
-# def getDriver():
-# 	print "Driver function called"
-# 	driver = webdriver.PhantomJS(executable_path='/usr/local/share/phantomjs/bin/phantomjs')
-# 	urlStr = "https://www.goodreads.com/user/sign_in"
+count=1
+done_data,done_urls = [], []
+k = open('user_reviews.json','r')
+if k:
+	print "Some data is there"
+	for line in k:
+		done_data.append(json.loads(line[:-2]))
+	for i in range(len(done_data)):
+		done_urls.append(done_data[i].keys()[0].encode('ascii','ignore'))
+else:
+	print "No data yet"
+	pass
+k.close()
 
-# 	try:
-# 		driver.get(urlStr)
-# 		# time.sleep(0.5)
-# 		driver.find_element_by_id("user_email").send_keys("kai.shu00@gmail.com")
-# 		driver.find_element_by_id("user_password").send_keys("19900327sk")
-# 		login = driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/div/div/div/div[2]/form/fieldset/div[5]/input")
-# 		login.click()
-# 	except Exception as e:
-# 		print e.message
-# 	return driver
+# print done_urls
 
-# driver = getDriver()
 for new_book in urlStr:
+	if new_book in done_urls:
+		print "Done book",new_book
+		continue
+	print "**************************"
+	print "count",count
+	print "**************************"
+	if count==20:
+		count=0
+		f = open('user_reviews.json', 'a')
+		for ele in user_reviews:
+			json.dump(ele,f)
+			f.write(','+'\n')
+		f.close()
+		user_reviews =[]
+
 	user_url, user_names, ratings,likes_url, oldajax_url = [], [],[],[], ""
 	previous_page = 1
 	print "This is the current book being scrapped", new_book	
-	# driver.get(new_book)
-	# response = driver.page_source
 	response =  requests.get(new_book)
 	soup = BeautifulSoup(response.content, "lxml")
 	review_container = soup.find_all('div',attrs={'class':'friendReviews elementListBrown'})
@@ -184,9 +195,10 @@ for new_book in urlStr:
 			} 
 
 		)
-# print user_reviews
-f = open('user_reviews.json', 'w')
-for ele in user_reviews:
-	json.dump(ele,f)
-	f.write(','+'\n')
-f.close()		
+	count+=1
+if user_reviews:
+	f = open('user_reviews.json', 'a')
+	for ele in user_reviews:
+		json.dump(ele,f)
+		f.write(','+'\n')
+	f.close()		
