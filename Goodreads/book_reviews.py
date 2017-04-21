@@ -25,15 +25,15 @@ header ={
 			"X-Requested-With":"XMLHttpRequest",
 
 	  	}
-# urlStr = []
-# g = open('goodreads_book.json','r')
-# book_data =  json.loads(g.read())
-# for i in range(len(book_data)):
-# 	key  = book_data[i].keys()[0]
-# 	for link in book_data[i][key]['book_urls']:
-# 		urlStr.append('https://www.goodreads.com'+link)
-# g.close()
-urlStr =['https://www.goodreads.com/book/show/8866920-the-breakout-novelist?from_search=true']
+urlStr = []
+g = open('goodreads_book.json','r')
+book_data =  json.loads(g.read())
+for i in range(len(book_data)):
+	key  = book_data[i].keys()[0]
+	for link in book_data[i][key]['book_urls']:
+		urlStr.append('https://www.goodreads.com'+link)
+g.close()
+# urlStr =['https://www.goodreads.com/book/show/8866920-the-breakout-novelist?from_search=true']
 print "No of books to be scraped:",len(urlStr)
 # 'https://www.goodreads.com/book/show/27862725-primeval-origins'
 
@@ -175,10 +175,10 @@ for new_book in urlStr:
 	user_reviews.append(
 			{
 				new_book:[
-				{"user_url":user_url[:-30]},
-				{"ratings" : ratings[:-30]},
-				{"user_names": user_names[:-30]},
-				{"likes_url": likes_url[:-30]}
+				{"user_url":user_url},
+				{"ratings" : ratings},
+				{"user_names": user_names},
+				{"likes_url": likes_url}
 
 						]
 			} 
