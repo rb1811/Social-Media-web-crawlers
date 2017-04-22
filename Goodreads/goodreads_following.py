@@ -91,7 +91,7 @@ for ele in urlStr:
 			newsoup = BeautifulSoup(response, "lxml")
 			for link in newsoup.find_all('a', attrs={"rel" : "acquaintance"}):
 				followers_list.append(link['href'])		
-			print "Till now followers list count",len(followers_list)																											
+			print "Till noe followers list count",len(followers_list)																											
 	else:
 		for link in soup.find_all('a', attrs={"rel" : "acquaintance"}):
 
