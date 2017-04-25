@@ -16,8 +16,10 @@ g = open('booklikes_reviews.json', 'r')
 for line in g:
 	if line:
 		done_urls[json.loads(line[:-2]).keys()[0].encode('ascii','ignore')] = None
+g.close()
 print "The number of books to be scraped", len(book_list)
 print "The number of books already done", len(done_urls)
+
 
 for urlStr in book_list:
 	if urlStr in done_urls:
