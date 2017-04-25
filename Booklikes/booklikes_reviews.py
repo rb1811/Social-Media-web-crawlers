@@ -23,7 +23,7 @@ print "The number of books already done", len(done_urls)
 
 for urlStr in book_list:
 	if urlStr in done_urls:
-		# print "This is done : ", urlStr
+		print "This is done : ", urlStr
 		continue
 	print "@@@@@@@@@@@@@@@@@@@@@@@@@"
 	print "Writing in batches"

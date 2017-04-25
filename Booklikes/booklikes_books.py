@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-urlStr = 'http://booklikes.com/catalog/1/fantasy/popular'
+urlStr = 'http://booklikes.com/catalog/13/non-fiction/popular'
 
 book_list= []
 
