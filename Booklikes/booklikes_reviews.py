@@ -40,8 +40,13 @@ for urlStr in book_list:
 	
 	reviews = []	
 	next_page = urlStr
+	page_count  = 0
 	while True:
-		
+		page_count +=1
+		if page_count == 150: #This is to filter out the urls that are community reviews which are never ending reviews
+			reviews = []
+			break
+			
 		print "%%%%%%%%%%%%%%%%%%%%%%%%%%"
 		print "This is the next page of the same book: ", next_page
 		print "This is the len of current reviews: ", len(reviews)
