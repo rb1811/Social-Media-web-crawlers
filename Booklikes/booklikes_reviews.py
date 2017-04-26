@@ -25,11 +25,12 @@ for urlStr in book_list:
 	if urlStr in done_urls:
 		print "This is done : ", urlStr
 		continue
-	print "@@@@@@@@@@@@@@@@@@@@@@@@@"
-	print "Writing in batches"
-	print "@@@@@@@@@@@@@@@@@@@@@@@@@"
+	
 
 	if booklikes_reviews:
+		print "@@@@@@@@@@@@@@@@@@@@@@@@@"
+		print "Writing in batches"
+		print "@@@@@@@@@@@@@@@@@@@@@@@@@"
 		f = open('booklikes_reviews.json','a')
 		for ele in booklikes_reviews:
 			json.dump(ele,f)
