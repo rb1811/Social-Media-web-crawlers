@@ -4,12 +4,14 @@ import time
 from scrapy.http import Request
 class goodreads_book(scrapy.Spider):
 	name = "goodreads_book"
-	start_urls =['https://www.goodreads.com/search?q=fiction+']
+	# start_urls =['https://www.goodreads.com/search?q=fiction+']
+	# start_urls = ['https://www.goodreads.com/search?q=non+fiction']
+	start_urls =['https://www.goodreads.com/search?q=romance']
 	base_url = 'https://www.goodreads.com/search?page=&q=fiction+&tab=books'
 	def parse(self, response):
 	  	total_pages = response.css('div.leftContainer div:nth-child(10) a::text').extract()
 	  	last_page  = total_pages[-2].encode('ascii','ignore')
-	  	time.sleep(10)
+	  	time.sleep(5)
 	  	for i in range(1,int(last_page)+1):
 	  		new_url = self.base_url[:self.base_url.find('=')+1]+str(i)+self.base_url[self.base_url.find('='):] 
 	  		req = Request(new_url,callback = self.parse_page)
