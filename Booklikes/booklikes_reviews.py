@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import json
+from tqdm import tqdm
 
 f =  open('booklikes_books_urls.txt','r')
 book_list = []
@@ -9,28 +10,27 @@ for line in f:
 		book_list.append(line[:-2]+'/reviews')
 
 
-# book_list = ['http://booklikes.com/trigger-warning-short-fictions-and-disturbances-neil-gaiman/book,12993075/reviews','http://booklikes.com/the-shadow-of-the-wind-lucia-graves-carlos-ruiz-zafon/book,17306/reviews']
+book_list = ['http://booklikes.com/trigger-warning-short-fictions-and-disturbances-neil-gaiman/book,12993075/reviews','http://booklikes.com/the-shadow-of-the-wind-lucia-graves-carlos-ruiz-zafon/book,17306/reviews', 'http://booklikes.com/book/book,6253210/reviews']
 booklikes_reviews, done_urls = [],{}
 
 g = open('booklikes_reviews.json', 'r')
 for line in g:
-	if line:
-		done_urls[json.loads(line[:-2]).keys()[0].encode('ascii','ignore')] = None
+	done_urls[json.loads(line[:-2]).keys()[0]] = None
+		
 g.close()
 print "The number of books to be scraped", len(book_list)
-print "The number of books already done", len(done_urls)
+print "The number of books already done", len(done_urls.keys())
 
-
-for urlStr in book_list:
+for urlStr in tqdm(book_list):
 	if urlStr in done_urls:
 		print "This is done : ", urlStr
 		continue
 	
 
 	if booklikes_reviews:
-		print "@@@@@@@@@@@@@@@@@@@@@@@@@"
+		# print "@@@@@@@@@@@@@@@@@@@@@@@@@"
 		print "Writing in batches"
-		print "@@@@@@@@@@@@@@@@@@@@@@@@@"
+		# print "@@@@@@@@@@@@@@@@@@@@@@@@@"
 		f = open('booklikes_reviews.json','a')
 		for ele in booklikes_reviews:
 			json.dump(ele,f)
@@ -40,12 +40,12 @@ for urlStr in book_list:
 	
 	reviews = []	
 	next_page = urlStr
-	page_count  = 0
+	# page_count  = 0
 	while True:
-		page_count +=1
-		if page_count == 150: #This is to filter out the urls that are community reviews which are never ending reviews
-			reviews = []
-			break
+		# page_count +=1
+		# if page_count == 150: #This is to filter out the urls that are community reviews which are never ending reviews
+		# 	reviews = []
+		# 	break
 			
 		print "%%%%%%%%%%%%%%%%%%%%%%%%%%"
 		print "This is the next page of the same book: ", next_page
@@ -54,6 +54,9 @@ for urlStr in book_list:
 
 		response =  requests.get(next_page)
 		soup =  BeautifulSoup(response.content, 'lxml')
+		if 'Community Reviews' in str(soup.find('h1', attrs={'class':'set-clearfix'})):
+			print "Community reviews"
+			break
 		for rev in soup.find('div', attrs={'class':'container content'}).find_all('div',attrs={'class':'book-page-review'}):
 			full_star,half_star  = 0,0
 			user_url = rev.find('div',attrs = {'class':'book-page-review-user'}).find('a')['href']
