@@ -26,7 +26,7 @@ header ={
 
 	  	}
 urlStr = []
-g = open('goodreads_book.json','r')
+g = open('goodreads_book_nonfiction.json','r')
 book_data =  json.loads(g.read())
 for i in range(len(book_data)):
 	key  = book_data[i].keys()[0]
@@ -35,18 +35,19 @@ for i in range(len(book_data)):
 g.close()
 # urlStr =['https://www.goodreads.com/book/show/8866920-the-breakout-novelist?from_search=true']
 print "No of books to be scraped:",len(urlStr)
+time.sleep(10)
 
 count=1
-done_data,done_urls = [], []
-k = open('user_reviews.json','r')
+done_data,done_urls = [], {}
+k = open('user_reviews_nonfiction.json','r')
 if k:
-	print "Some data is there"
+	# print "Some data is there"
 	for line in k:
 		done_data.append(json.loads(line[:-2]))
 	for i in range(len(done_data)):
-		done_urls.append(done_data[i].keys()[0].encode('ascii','ignore'))
+		done_urls[done_data[i].keys()[0].encode('ascii','ignore')]=None
 else:
-	print "No data yet"
+	# print "No data yet"
 	pass
 k.close()
 
@@ -54,14 +55,15 @@ k.close()
 
 for new_book in urlStr:
 	if new_book in done_urls:
-		print "Done book",new_book
+		# print "Done book",new_book
 		continue
-	print "**************************"
-	print "count",count
-	print "**************************"
+
+	# print "**************************"
+	# print "count",count
+	# print "**************************"
 	if count==20:
 		count=0
-		f = open('user_reviews.json', 'a')
+		f = open('user_reviews_nonfiction.json', 'a')
 		for ele in user_reviews:
 			json.dump(ele,f)
 			f.write(','+'\n')
@@ -69,7 +71,7 @@ for new_book in urlStr:
 		user_reviews =[]
 
 	user_url, user_names, ratings,likes_url, oldajax_url = [], [],[],[], ""
-	previous_page = 1
+	# previous_page = 1
 	print "This is the current book being scrapped", new_book	
 	response =  requests.get(new_book)
 	soup = BeautifulSoup(response.content, "lxml")
@@ -112,12 +114,12 @@ for new_book in urlStr:
 	# print user_url
 	# print user_names
 	# print likes_url
-	print "#################"
+	# print "#################"
 	print "usernames: user_url: ratings:  likes_url ",len(user_names), len(user_url), len(ratings), len(likes_url)
-	print "#################"
+	# print "#################"
 	while True:
-		print  previous_page 
-		print "@@@@@@@@@@@@@"
+		# print  previous_page 
+		# print "@@@@@@@@@@@@@"
 		if not soup.find('a',attrs={"class":"next_page"}):
 			break
 		next_page = soup.find('a',attrs={"class":"next_page"})['onclick']
@@ -174,9 +176,9 @@ for new_book in urlStr:
 						else:
 							# print "None"
 							likes_url.append(None)
-				print "&&&&&&&&&&&&&&&&&&&"
+				# print "&&&&&&&&&&&&&&&&&&&"
 				print "usernames: user_url: ratings:  likes_url ",len(user_names), len(user_url), len(ratings), len(likes_url)
-				print "&&&&&&&&&&&&&&&&&&&"
+				# print "&&&&&&&&&&&&&&&&&&&"
 	
 			else:
 				break
@@ -197,7 +199,7 @@ for new_book in urlStr:
 		)
 	count+=1
 if user_reviews:
-	f = open('user_reviews.json', 'a')
+	f = open('user_reviews_nonfiction.json', 'a')
 	for ele in user_reviews:
 		json.dump(ele,f)
 		f.write(','+'\n')
