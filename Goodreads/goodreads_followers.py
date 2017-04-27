@@ -2,41 +2,53 @@ import requests,urllib2,time
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import json
+from tqdm import tqdm
+
+output_file = 'goodreads_followers.json'
 
 goodreads_url =  'https://www.goodreads.com'
-f =  open('test_followers.json', 'r')
-all_data,urlStr = [], []
+f =  open('user_reviews_fiction.json', 'r')
+all_data,urlStr = [], {}
 for line in f:
+	all_data.append(json.loads(line[:-2]))
+f1 = open('user_reviews_nonfiction.json', 'r')
+for line in f1:
+	all_data.append(json.loads(line[:-2]))
+f2 = open('user_reviews_classic.json', 'r')
+for line in f2:
 	all_data.append(json.loads(line[:-2]))
 for i in range(len(all_data)):
 	key =  all_data[i].keys()[0]
 	for link in all_data[i][key][0]['user_url']:
-		if goodreads_url+link.encode('ascii','ignore').replace('/show','')+'/followers' not in urlStr: 
-			urlStr.append(goodreads_url+link.encode('ascii','ignore').replace('/show','')+'/followers')
+		if goodreads_url+link.encode('ascii','ignore').replace('/show','')+'/followers' not in urlStr:
+			urlStr[goodreads_url + link.encode('ascii', 'ignore').replace('/show', '') + '/followers'] = 1
 f.close()
 all_data = []
 # /user/show/5253785-lyn
 print "Number of urls to be scrapped",len(urlStr)
 # urlStr =['https://www.goodreads.com/user/5253785-lyn/followers','https://www.goodreads.com/user/6693836-melanie/followers']
 
-done_data,done_urls = [], []
+done_data,done_urls = [], {}
 k = open('goodreads_followers.json','r')
 if k:
-	print "Some data is there"
+	# print "Some data is there"
 	for line in k:
-		done_data.append(json.loads(line[:-2]))
+		try:
+			done_data.append(json.loads(line[:-2]))
+		except:
+			pass
 	for i in range(len(done_data)):
-		done_urls.append(done_data[i].keys()[0].encode('ascii','ignore'))
+		done_urls[done_data[i].keys()[0].encode('ascii','ignore')]=1
 else:
-	print "No data yet"
+	# print "No data yet"
 	pass
 k.close()
 done_data =[]
 
 
 def getDriver():
-	print "entered driver function"
-	driver = webdriver.PhantomJS(executable_path='/usr/local/share/phantomjs/bin/phantomjs')
+	# print "entered driver function"
+	driver = webdriver.PhantomJS(executable_path='C:\\Users\\skai2\\Downloads\\phantomjs-2.1.1-windows\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe')
 	urlStr = "https://www.goodreads.com/user/sign_in"
 
 	try:
@@ -52,19 +64,21 @@ def getDriver():
 
 driver = getDriver()
 followers_dict = []
+
+all_urls_list = urlStr.keys()
 count = 1
-for ele in urlStr:
+for ele in tqdm(all_urls_list[:20000]):
 	text = ele.replace('https://www.goodreads.com','').replace('/followers','')
 	if text[:text.rfind('/')]+'/show'+text[text.rfind('/'):] in done_urls:
-		print "done urlls ", ele
+		# print "done urlls ", ele
 		continue
 
-	print "**************************"
-	print "count",count
-	print "**************************"
+	# print "**************************"
+	# print "count",count
+	# print "**************************"
 	followers_list=[]
 
-	print "This the current url being scrapped " , ele
+	# print "This the current url being scrapped " , ele
 	
 	driver.get(ele)
 	# response =  requests.get(ele)
@@ -74,24 +88,24 @@ for ele in urlStr:
 		last_page_url = soup.find('div', attrs = {'style' :"text-align: right"}).find_all('a')[-2]['href']
 	except Exception as e:
 		# print e.message
-		print "1 page followers"
+		# print "1 page followers"
 		last_page_url=0
 
 	if last_page_url !=0:
 		for a_link in soup.find_all('a', attrs={"rel" : "acquaintance"}):
 			followers_list.append(a_link['href'])
 		last_page =  int(last_page_url[last_page_url.find('=')+1:])
-		print "The last page is ", last_page
+		# print "The last page is ", last_page
 		for i in range(2,last_page+1):	
 			next_page_url = goodreads_url+last_page_url[:last_page_url.find('=')+1]+str(i)
-			print next_page_url
+			# print next_page_url
 			driver.get(next_page_url)
 			# response =  requests.get(ele)
 			response = driver.page_source
 			newsoup = BeautifulSoup(response, "lxml")
 			for link in newsoup.find_all('a', attrs={"rel" : "acquaintance"}):
 				followers_list.append(link['href'])		
-			print "Till now followers list count",len(followers_list)																											
+			# print "Till now followers list count",len(followers_list)
 	else:
 		for link in soup.find_all('a', attrs={"rel" : "acquaintance"}):
 
@@ -100,9 +114,9 @@ for ele in urlStr:
 	followers_dict.append({text[:text.rfind('/')]+'/show'+text[text.rfind('/'):] : followers_list})
 
 	if count == 2:
-		print "Wrrting in batches"
+		# print "Wrrting in batches"
 		count = 1
-		f = open ('goodreads_followers.json','a')
+		f = open (output_file,'a')
 		for ele in followers_dict:
 			json.dump(ele,f)
 			f.write(','+'\n')
@@ -112,7 +126,7 @@ for ele in urlStr:
 	count+=1
 
 if followers_dict:
-	f = open ('goodreads_followers.json','a')
+	f = open (output_file,'a')
 	for ele in followers_dict:
 		json.dump(ele,f)
 		f.write(','+'\n')

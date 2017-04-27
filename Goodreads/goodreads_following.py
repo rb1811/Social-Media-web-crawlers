@@ -2,41 +2,53 @@ import requests,urllib2,time
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import json
+from tqdm import tqdm
+
+output_file = 'goodreads_following.json'
 
 goodreads_url =  'https://www.goodreads.com'
-f =  open('test_followers.json', 'r')
-all_data,urlStr = [], []
+f =  open('user_reviews_fiction.json', 'r')
+all_data,urlStr = [], {}
 for line in f:
+	all_data.append(json.loads(line[:-2]))
+f1 = open('user_reviews_nonfiction.json', 'r')
+for line in f1:
+	all_data.append(json.loads(line[:-2]))
+f2 = open('user_reviews_classic.json', 'r')
+for line in f2:
 	all_data.append(json.loads(line[:-2]))
 for i in range(len(all_data)):
 	key =  all_data[i].keys()[0]
 	for link in all_data[i][key][0]['user_url']:
 		if goodreads_url+link.encode('ascii','ignore').replace('/show','')+'/following' not in urlStr: 
-			urlStr.append(goodreads_url+link.encode('ascii','ignore').replace('/show','')+'/following')
+			urlStr[goodreads_url+link.encode('ascii','ignore').replace('/show','')+'/following']=1
 f.close()
 all_data = []
 # /user/show/5253785-lyn
 print "Number of urls to be scrapped",len(urlStr)
 # urlStr =['https://www.goodreads.com/user/5253785-lyn/following','https://www.goodreads.com/user/6693836-melanie/following', 'https://www.goodreads.com/user/1033675-matt/following']
 
-done_data,done_urls = [], []
+done_data,done_urls = [], {}
 k = open('goodreads_following.json','r')
 if k:
-	print "Some data is there"
+	# print "Some data is there"
 	for line in k:
-		done_data.append(json.loads(line[:-2]))
+		try:
+			done_data.append(json.loads(line[:-2]))
+		except:
+			pass
 	for i in range(len(done_data)):
-		done_urls.append(done_data[i].keys()[0].encode('ascii','ignore'))
+		done_urls[done_data[i].keys()[0].encode('ascii','ignore')]=1
 else:
-	print "No data yet"
+	# print "No data yet"
 	pass
 k.close()
 done_data =[]
 
 
 def getDriver():
-	print "entered driver function"
-	driver = webdriver.PhantomJS(executable_path='/usr/local/share/phantomjs/bin/phantomjs')
+	# print "entered driver function"
+	driver = webdriver.PhantomJS(executable_path='C:\\Users\\skai2\\Downloads\\phantomjs-2.1.1-windows\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe')
 	urlStr = "https://www.goodreads.com/user/sign_in"
 
 	try:
@@ -53,18 +65,19 @@ def getDriver():
 driver = getDriver()
 following_dict = []
 count = 1
-for ele in urlStr:
+all_urls_list = urlStr.keys()
+for ele in tqdm(all_urls_list[:20000]):
 	text = ele.replace('https://www.goodreads.com','').replace('/following','')
 	if text[:text.rfind('/')]+'/show'+text[text.rfind('/'):] in done_urls:
-		print "done urlls ", ele
+		# print "done urlls ", ele
 		continue
 
-	print "**************************"
-	print "count",count
-	print "**************************"
+	# print "**************************"
+	# print "count",count
+	# print "**************************"
 	following_list=[]
 
-	print "This the current url being scrapped " , ele
+	# print "This the current url being scrapped " , ele
 	
 	driver.get(ele)
 	# response =  requests.get(ele)
@@ -79,10 +92,10 @@ for ele in urlStr:
 			driver.get(goodreads_url+next_page_url)
 			response = driver.page_source
 			soup = BeautifulSoup(response, "lxml")
-			print "The next pageurl ",goodreads_url+next_page_url
+			# print "The next pageurl ",goodreads_url+next_page_url
 		except Exception as e:
 			# print e.message
-			print "1 page only"
+			# print "1 page only"
 			next_page_url=0
 
 		if next_page_url !=0:
@@ -108,14 +121,14 @@ for ele in urlStr:
 			break
 			
 
-	print "This person had this many following",len(following_list)
+	# print "This person had this many following",len(following_list)
 	text = ele.replace('https://www.goodreads.com','').replace('/following','')
 	following_dict.append({text[:text.rfind('/')]+'/show'+text[text.rfind('/'):] : following_list})
 
 	if count == 3:
-		print "Writing in batches"
+		# print "Writing in batches"
 		count = 1
-		f = open ('goodreads_following.json','a')
+		f = open (output_file,'a')
 		for ele in following_dict:
 			json.dump(ele,f)
 			f.write(','+'\n')
@@ -125,7 +138,7 @@ for ele in urlStr:
 	count+=1
 
 if following_dict:
-	f = open ('goodreads_following.json','a')
+	f = open (output_file,'a')
 	for ele in following_dict:
 		json.dump(ele,f)
 		f.write(','+'\n')
