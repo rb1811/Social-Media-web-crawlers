@@ -96,6 +96,8 @@ for ele in tqdm(all_urls_list[:20000]):
 			followers_list.append(a_link['href'])
 		last_page =  int(last_page_url[last_page_url.find('=')+1:])
 		# print "The last page is ", last_page
+		if last_page>100:
+			last_page=100
 		for i in range(2,last_page+1):	
 			next_page_url = goodreads_url+last_page_url[:last_page_url.find('=')+1]+str(i)
 			# print next_page_url

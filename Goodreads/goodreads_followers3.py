@@ -43,6 +43,22 @@ else:
 	# print "No data yet"
 	pass
 k.close()
+
+k3 = open('goodreads_followers3.json','r')
+if k3:
+	# print "Some data is there"
+	for line in k3:
+		try:
+			done_data.append(json.loads(line[:-2]))
+		except:
+			pass
+	for i in range(len(done_data)):
+		done_urls[done_data[i].keys()[0].encode('ascii','ignore')]=1
+else:
+	# print "No data yet"
+	pass
+k3.close()
+
 done_data =[]
 
 
@@ -70,7 +86,14 @@ followers_dict = []
 
 all_urls_list = urlStr.keys()
 count = 1
-for ele in tqdm(all_urls_list[60001:80000]):
+reamining_url_list = []
+for ele in all_urls_list[60001:80000]:
+    text = ele.replace('https://www.goodreads.com', '').replace('/followers', '')
+    if text[:text.rfind('/')] + '/show' + text[text.rfind('/'):] in done_urls:
+        continue
+    reamining_url_list.append(ele)
+
+for ele in tqdm(reamining_url_list):
     text = ele.replace('https://www.goodreads.com', '').replace('/followers', '')
     if text[:text.rfind('/')] + '/show' + text[text.rfind('/'):] in done_urls:
         # print "done urlls ", ele
@@ -98,6 +121,8 @@ for ele in tqdm(all_urls_list[60001:80000]):
         for a_link in soup.find_all('a', attrs={"rel": "acquaintance"}):
             followers_list.append(a_link['href'])
         last_page = int(last_page_url[last_page_url.find('=') + 1:])
+        if last_page > 100:
+            last_page = 100
         # print "The last page is ", last_page
         for i in range(2, last_page + 1):
             next_page_url = goodreads_url + last_page_url[:last_page_url.find('=') + 1] + str(i)

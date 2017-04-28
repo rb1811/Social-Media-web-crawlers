@@ -98,6 +98,8 @@ for ele in tqdm(all_urls_list[40001:60000]):
         for a_link in soup.find_all('a', attrs={"rel": "acquaintance"}):
             followers_list.append(a_link['href'])
         last_page = int(last_page_url[last_page_url.find('=') + 1:])
+        if last_page > 100:
+            last_page = 100
         # print "The last page is ", last_page
         for i in range(2, last_page + 1):
             next_page_url = goodreads_url + last_page_url[:last_page_url.find('=') + 1] + str(i)
