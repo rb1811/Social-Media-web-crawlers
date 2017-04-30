@@ -17,6 +17,10 @@ for line in f1:
 f2 = open('user_reviews_classic.json', 'r')
 for line in f2:
 	all_data.append(json.loads(line[:-2]))
+f3 = open('user_reviews_romance.json', 'r')
+for line in f2:
+	all_data.append(json.loads(line[:-2]))
+
 for i in range(len(all_data)):
 	key =  all_data[i].keys()[0]
 	for link in all_data[i][key][0]['user_url']:
