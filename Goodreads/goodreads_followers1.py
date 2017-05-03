@@ -7,8 +7,9 @@ from tqdm import tqdm
 output_file = 'goodreads_followers1.json'
 
 goodreads_url = 'https://www.goodreads.com'
-f = open('user_reviews_fiction.json', 'r')
 all_data, urlStr = [], {}
+
+f = open('user_reviews_fiction.json', 'r')
 for line in f:
     all_data.append(json.loads(line[:-2]))
 f1 = open('user_reviews_nonfiction.json', 'r')
@@ -17,33 +18,116 @@ for line in f1:
 f2 = open('user_reviews_classic.json', 'r')
 for line in f2:
     all_data.append(json.loads(line[:-2]))
+f3 = open('user_reviews_romance.json', 'r')
+for line in f3:
+    all_data.append(json.loads(line[:-2]))
+
 for i in range(len(all_data)):
     key = all_data[i].keys()[0]
     for link in all_data[i][key][0]['user_url']:
         if goodreads_url + link.encode('ascii', 'ignore').replace('/show', '') + '/followers' not in urlStr:
             urlStr[goodreads_url + link.encode('ascii', 'ignore').replace('/show', '') + '/followers'] = 1
+f1.close()
+f2.close()
+f3.close()
 f.close()
 all_data = []
 # /user/show/5253785-lyn
 print "Number of urls to be scrapped", len(urlStr)
 # urlStr =['https://www.goodreads.com/user/5253785-lyn/followers','https://www.goodreads.com/user/6693836-melanie/followers']
 
-done_data,done_urls = [], {}
-k = open('goodreads_followers.json','r')
+done_data, done_urls = [], {}
+k = open('goodreads_followers.json', 'r')
 if k:
-	# print "Some data is there"
-	for line in k:
-		try:
-			done_data.append(json.loads(line[:-2]))
-		except:
-			pass
-	for i in range(len(done_data)):
-		done_urls[done_data[i].keys()[0].encode('ascii','ignore')]=1
+    # print "Some data is there"
+    for line in k:
+        try:
+            done_data.append(json.loads(line[:-2]))
+        except:
+            pass
+    for i in range(len(done_data)):
+        done_urls[done_data[i].keys()[0].encode('ascii', 'ignore')] = 1
 else:
-	# print "No data yet"
-	pass
+    # print "No data yet"
+    pass
 k.close()
-done_data =[]
+
+k1 = open('goodreads_followers1.json', 'r')
+if k1:
+    # print "Some data is there"
+    for line in k1:
+        try:
+            done_data.append(json.loads(line[:-2]))
+        except:
+            pass
+    for i in range(len(done_data)):
+        done_urls[done_data[i].keys()[0].encode('ascii', 'ignore')] = 1
+else:
+    # print "No data yet"
+    pass
+k1.close()
+
+k2 = open('goodreads_followers2.json', 'r')
+if k2:
+    # print "Some data is there"
+    for line in k2:
+        try:
+            done_data.append(json.loads(line[:-2]))
+        except:
+            pass
+    for i in range(len(done_data)):
+        done_urls[done_data[i].keys()[0].encode('ascii', 'ignore')] = 1
+else:
+    # print "No data yet"
+    pass
+k2.close()
+
+k3 = open('goodreads_followers3.json', 'r')
+if k3:
+    # print "Some data is there"
+    for line in k3:
+        try:
+            done_data.append(json.loads(line[:-2]))
+        except:
+            pass
+    for i in range(len(done_data)):
+        done_urls[done_data[i].keys()[0].encode('ascii', 'ignore')] = 1
+else:
+    # print "No data yet"
+    pass
+k3.close()
+
+k4 = open('goodreads_followers4.json', 'r')
+if k4:
+    # print "Some data is there"
+    for line in k4:
+        try:
+            done_data.append(json.loads(line[:-2]))
+        except:
+            pass
+    for i in range(len(done_data)):
+        done_urls[done_data[i].keys()[0].encode('ascii', 'ignore')] = 1
+else:
+    # print "No data yet"
+    pass
+k4.close()
+
+k5 = open('goodreads_followers_romance.json', 'r')
+if k5:
+    # print "Some data is there"
+    for line in k5:
+        try:
+            done_data.append(json.loads(line[:-2]))
+        except:
+            pass
+    for i in range(len(done_data)):
+        done_urls[done_data[i].keys()[0].encode('ascii', 'ignore')] = 1
+else:
+    # print "No data yet"
+    pass
+k5.close()
+
+done_data = []
 
 
 def getDriver():
@@ -69,12 +153,15 @@ driver = getDriver()
 followers_dict = []
 
 all_urls_list = urlStr.keys()
-count = 1
-for ele in tqdm(all_urls_list[20001:40000]):
+remain_list = []
+for ele in tqdm(all_urls_list):
     text = ele.replace('https://www.goodreads.com', '').replace('/followers', '')
     if text[:text.rfind('/')] + '/show' + text[text.rfind('/'):] in done_urls:
-        # print "done urlls ", ele
         continue
+    remain_list.append(ele)
+count = 1
+
+for ele in tqdm(remain_list[7001:14000]):
 
     # print "**************************"
     # print "count",count
@@ -98,9 +185,9 @@ for ele in tqdm(all_urls_list[20001:40000]):
         for a_link in soup.find_all('a', attrs={"rel": "acquaintance"}):
             followers_list.append(a_link['href'])
         last_page = int(last_page_url[last_page_url.find('=') + 1:])
+        # print "The last page is ", last_page
         if last_page > 100:
             last_page = 100
-        # print "The last page is ", last_page
         for i in range(2, last_page + 1):
             next_page_url = goodreads_url + last_page_url[:last_page_url.find('=') + 1] + str(i)
             # print next_page_url
@@ -110,14 +197,14 @@ for ele in tqdm(all_urls_list[20001:40000]):
             newsoup = BeautifulSoup(response, "lxml")
             for link in newsoup.find_all('a', attrs={"rel": "acquaintance"}):
                 followers_list.append(link['href'])
-            # print "Till now followers list count",len(followers_list)
+                # print "Till now followers list count",len(followers_list)
     else:
         for link in soup.find_all('a', attrs={"rel": "acquaintance"}):
             followers_list.append(link['href'])
     text = ele.replace('https://www.goodreads.com', '').replace('/followers', '')
     followers_dict.append({text[:text.rfind('/')] + '/show' + text[text.rfind('/'):]: followers_list})
 
-    if count == 5:
+    if count == 2:
         # print "Wrrting in batches"
         count = 1
         f = open(output_file, 'a')

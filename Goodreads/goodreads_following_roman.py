@@ -88,7 +88,7 @@ else:
 k3.close()
 
 k4 = open('goodreads_following4.json','r')
-if k:
+if k4:
 	# print "Some data is there"
 	for line in k4:
 		try:

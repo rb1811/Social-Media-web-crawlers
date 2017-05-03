@@ -78,6 +78,9 @@ for new_book in tqdm(urlStr):
 	soup = BeautifulSoup(response.content, "lxml")
 	try:
 		for container in soup.find('div', attrs={'id':'bookReviews'}).find_all('div',attrs={'class':'friendReviews elementListBrown notext'}):
+			text = container.text
+			if 'rated it' not in text:
+				continue
 			temp_user_url  = container.find('div',attrs={'class':'reviewHeader uitext stacked'}).find('a')['href'] 
 			tmep_user_name = ' '.join(temp_user_url[temp_user_url.find('-')+1:].split('-'))
 			user_url.append(temp_user_url)
@@ -104,6 +107,9 @@ for new_book in tqdm(urlStr):
 
 	review_container = soup.find_all('div',attrs={'class':'friendReviews elementListBrown'})
 	for container in review_container:
+		text = container.text
+		if 'rated it' not in text:
+			continue
 		for link in container.find_all('a',attrs= {"class":"user"}):
 				if link['href']:
 					user_url.append(link['href'])
@@ -169,6 +175,9 @@ for new_book in tqdm(urlStr):
 				soup = BeautifulSoup(data, "lxml")
 				try:
 					for container in soup.find('div', attrs={'id':'bookReviews'}).find_all('div',attrs={'class':'friendReviews elementListBrown notext'}):
+						text = container.text
+						if 'rated it' not in text:
+							continue
 						temp_user_url  = container.find('div',attrs={'class':'reviewHeader uitext stacked'}).find('a')['href'] 
 						tmep_user_name = ' '.join(temp_user_url[temp_user_url.find('-')+1:].split('-'))
 						user_url.append(temp_user_url)
@@ -194,6 +203,9 @@ for new_book in tqdm(urlStr):
 
 				review_container = soup.find_all('div',attrs={'class':'friendReviews elementListBrown'})
 				for container in review_container:
+					text = container.text
+					if 'rated it' not in text:
+						continue
 					for link in container.find_all('a',attrs= {"class":"user"}):
 							if link['href']:
 								user_url.append(link['href'])

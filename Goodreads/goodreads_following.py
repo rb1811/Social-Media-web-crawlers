@@ -6,22 +6,30 @@ from tqdm import tqdm
 
 output_file = 'goodreads_following.json'
 
-goodreads_url =  'https://www.goodreads.com'
-f =  open('user_reviews_fiction.json', 'r')
-all_data,urlStr = [], {}
+goodreads_url = 'https://www.goodreads.com'
+all_data, urlStr = [], {}
+
+f = open('user_reviews_fiction.json', 'r')
 for line in f:
-	all_data.append(json.loads(line[:-2]))
+    all_data.append(json.loads(line[:-2]))
 f1 = open('user_reviews_nonfiction.json', 'r')
 for line in f1:
-	all_data.append(json.loads(line[:-2]))
+    all_data.append(json.loads(line[:-2]))
 f2 = open('user_reviews_classic.json', 'r')
 for line in f2:
-	all_data.append(json.loads(line[:-2]))
+    all_data.append(json.loads(line[:-2]))
+f3 = open('user_reviews_romance.json', 'r')
+for line in f3:
+    all_data.append(json.loads(line[:-2]))
+
 for i in range(len(all_data)):
-	key =  all_data[i].keys()[0]
-	for link in all_data[i][key][0]['user_url']:
-		if goodreads_url+link.encode('ascii','ignore').replace('/show','')+'/following' not in urlStr: 
-			urlStr[goodreads_url+link.encode('ascii','ignore').replace('/show','')+'/following']=1
+    key = all_data[i].keys()[0]
+    for link in all_data[i][key][0]['user_url']:
+        if goodreads_url + link.encode('ascii', 'ignore').replace('/show', '') + '/following' not in urlStr:
+            urlStr[goodreads_url + link.encode('ascii', 'ignore').replace('/show', '') + '/following'] = 1
+f1.close()
+f2.close()
+f3.close()
 f.close()
 all_data = []
 # /user/show/5253785-lyn
@@ -29,20 +37,95 @@ print "Number of urls to be scrapped",len(urlStr)
 # urlStr =['https://www.goodreads.com/user/5253785-lyn/following','https://www.goodreads.com/user/6693836-melanie/following', 'https://www.goodreads.com/user/1033675-matt/following']
 
 done_data,done_urls = [], {}
-k = open('goodreads_following.json','r')
+k = open('goodreads_following.json', 'r')
 if k:
-	# print "Some data is there"
-	for line in k:
-		try:
-			done_data.append(json.loads(line[:-2]))
-		except:
-			pass
-	for i in range(len(done_data)):
-		done_urls[done_data[i].keys()[0].encode('ascii','ignore')]=1
+    # print "Some data is there"
+    for line in k:
+        try:
+            done_data.append(json.loads(line[:-2]))
+        except:
+            pass
+    for i in range(len(done_data)):
+        done_urls[done_data[i].keys()[0].encode('ascii', 'ignore')] = 1
 else:
-	# print "No data yet"
-	pass
+    # print "No data yet"
+    pass
 k.close()
+
+k1 = open('goodreads_following1.json', 'r')
+if k1:
+    # print "Some data is there"
+    for line in k1:
+        try:
+            done_data.append(json.loads(line[:-2]))
+        except:
+            pass
+    for i in range(len(done_data)):
+        done_urls[done_data[i].keys()[0].encode('ascii', 'ignore')] = 1
+else:
+    # print "No data yet"
+    pass
+k1.close()
+
+k2 = open('goodreads_following2.json', 'r')
+if k2:
+    # print "Some data is there"
+    for line in k2:
+        try:
+            done_data.append(json.loads(line[:-2]))
+        except:
+            pass
+    for i in range(len(done_data)):
+        done_urls[done_data[i].keys()[0].encode('ascii', 'ignore')] = 1
+else:
+    # print "No data yet"
+    pass
+k2.close()
+
+k3 = open('goodreads_following3.json', 'r')
+if k3:
+    # print "Some data is there"
+    for line in k3:
+        try:
+            done_data.append(json.loads(line[:-2]))
+        except:
+            pass
+    for i in range(len(done_data)):
+        done_urls[done_data[i].keys()[0].encode('ascii', 'ignore')] = 1
+else:
+    # print "No data yet"
+    pass
+k3.close()
+
+k4 = open('goodreads_following4.json', 'r')
+if k4:
+    # print "Some data is there"
+    for line in k4:
+        try:
+            done_data.append(json.loads(line[:-2]))
+        except:
+            pass
+    for i in range(len(done_data)):
+        done_urls[done_data[i].keys()[0].encode('ascii', 'ignore')] = 1
+else:
+    # print "No data yet"
+    pass
+k4.close()
+
+k5 = open('goodreads_following_roman.json', 'r')
+if k5:
+    # print "Some data is there"
+    for line in k5:
+        try:
+            done_data.append(json.loads(line[:-2]))
+        except:
+            pass
+    for i in range(len(done_data)):
+        done_urls[done_data[i].keys()[0].encode('ascii', 'ignore')] = 1
+else:
+    # print "No data yet"
+    pass
+k5.close()
 done_data =[]
 
 
@@ -66,11 +149,15 @@ driver = getDriver()
 following_dict = []
 count = 1
 all_urls_list = urlStr.keys()
-for ele in tqdm(all_urls_list[:20000]):
-	text = ele.replace('https://www.goodreads.com','').replace('/following','')
-	if text[:text.rfind('/')]+'/show'+text[text.rfind('/'):] in done_urls:
-		# print "done urlls ", ele
+remain_list = []
+for ele in tqdm(all_urls_list):
+	text = ele.replace('https://www.goodreads.com', '').replace('/following', '')
+	if text[:text.rfind('/')] + '/show' + text[text.rfind('/'):] in done_urls:
 		continue
+	remain_list.append(ele)
+
+
+for ele in tqdm(remain_list[:25000]):
 
 	# print "**************************"
 	# print "count",count
