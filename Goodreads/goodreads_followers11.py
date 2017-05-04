@@ -4,47 +4,23 @@ from selenium import webdriver
 import json
 from tqdm import tqdm
 
-output_file = 'goodreads_followers.json'
+output_file = 'goodreads_followers11.json'
 
 goodreads_url = 'https://www.goodreads.com'
 all_data, urlStr = [], {}
 
 f = open('user_reviews_fiction.json', 'r')
 for line in f:
-    try:
-        all_data.append(json.loads(line[:-2]))
-    except:
-        pass
+    all_data.append(json.loads(line[:-2]))
 f1 = open('user_reviews_nonfiction.json', 'r')
 for line in f1:
-    try:
-        all_data.append(json.loads(line[:-2]))
-    except:
-        pass
+    all_data.append(json.loads(line[:-2]))
 f2 = open('user_reviews_classic.json', 'r')
 for line in f2:
-    try:
-        all_data.append(json.loads(line[:-2]))
-    except:
-        pass
+    all_data.append(json.loads(line[:-2]))
 f3 = open('user_reviews_romance.json', 'r')
 for line in f3:
-    try:
-        all_data.append(json.loads(line[:-2]))
-    except:
-        pass
-f4 = open('user_reviews_history.json', 'r')
-for line in f4:
-    try:
-        all_data.append(json.loads(line[:-2]))
-    except:
-        pass
-f5 = open('user_reviews_biography.json', 'r')
-for line in f5:
-    try:
-        all_data.append(json.loads(line[:-2]))
-    except:
-        pass
+    all_data.append(json.loads(line[:-2]))
 
 for i in range(len(all_data)):
     key = all_data[i].keys()[0]
@@ -54,10 +30,7 @@ for i in range(len(all_data)):
 f1.close()
 f2.close()
 f3.close()
-f4.close()
-f5.close()
 f.close()
-
 all_data = []
 # /user/show/5253785-lyn
 print "Number of urls to be scrapped", len(urlStr)
@@ -350,9 +323,7 @@ for ele in tqdm(all_urls_list):
     remain_list.append(ele)
 count = 1
 
-print "Number of urls remaining", len(remain_list)
-
-for ele in tqdm(remain_list[:100000]):
+for ele in tqdm(remain_list[7001:14000]):
 
     # print "**************************"
     # print "count",count
@@ -377,8 +348,8 @@ for ele in tqdm(remain_list[:100000]):
             followers_list.append(a_link['href'])
         last_page = int(last_page_url[last_page_url.find('=') + 1:])
         # print "The last page is ", last_page
-        if last_page > 30:
-            last_page = 30
+        if last_page > 100:
+            last_page = 100
         for i in range(2, last_page + 1):
             next_page_url = goodreads_url + last_page_url[:last_page_url.find('=') + 1] + str(i)
             # print next_page_url

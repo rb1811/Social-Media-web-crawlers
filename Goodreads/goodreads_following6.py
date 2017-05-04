@@ -4,7 +4,7 @@ from selenium import webdriver
 import json
 from tqdm import tqdm
 
-output_file = 'goodreads_following3.json'
+output_file = 'goodreads_following6.json'
 
 goodreads_url = 'https://www.goodreads.com'
 all_data, urlStr = [], {}
@@ -331,7 +331,7 @@ for ele in tqdm(all_urls_list):
         continue
     remain_list.append(ele)
 
-for ele in tqdm(remain_list[75001:100000]):
+for ele in tqdm(remain_list[25001:50000]):
 
     # print "**************************"
     # print "count",count

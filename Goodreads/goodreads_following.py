@@ -126,6 +126,180 @@ else:
     # print "No data yet"
     pass
 k5.close()
+
+#############################################################################################
+k6 = open('goodreads_following6.json','r')
+if k6:
+	# print "Some data is there"
+	for line in k6:
+		try:
+			done_data.append(json.loads(line[:-2]))
+		except:
+			pass
+	for i in range(len(done_data)):
+		done_urls[done_data[i].keys()[0].encode('ascii','ignore')]=1
+else:
+	# print "No data yet"
+	pass
+k6.close()
+
+
+k7 = open('goodreads_following7.json','r')
+if k7:
+	# print "Some data is there"
+	for line in k7:
+		try:
+			done_data.append(json.loads(line[:-2]))
+		except:
+			pass
+	for i in range(len(done_data)):
+		done_urls[done_data[i].keys()[0].encode('ascii','ignore')]=1
+else:
+	# print "No data yet"
+	pass
+k7.close()
+
+k8 = open('goodreads_following8.json','r')
+if k8:
+	# print "Some data is there"
+	for line in k8:
+		try:
+			done_data.append(json.loads(line[:-2]))
+		except:
+			pass
+	for i in range(len(done_data)):
+		done_urls[done_data[i].keys()[0].encode('ascii','ignore')]=1
+else:
+	# print "No data yet"
+	pass
+k8.close()
+
+k9 = open('goodreads_following9.json','r')
+if k9:
+	# print "Some data is there"
+	for line in k9:
+		try:
+			done_data.append(json.loads(line[:-2]))
+		except:
+			pass
+	for i in range(len(done_data)):
+		done_urls[done_data[i].keys()[0].encode('ascii','ignore')]=1
+else:
+	# print "No data yet"
+	pass
+k9.close()
+
+k10 = open('goodreads_following10.json','r')
+if k10:
+	# print "Some data is there"
+	for line in k10:
+		try:
+			done_data.append(json.loads(line[:-2]))
+		except:
+			pass
+	for i in range(len(done_data)):
+		done_urls[done_data[i].keys()[0].encode('ascii','ignore')]=1
+else:
+	# print "No data yet"
+	pass
+k10.close()
+
+k11 = open('goodreads_following11.json','r')
+if k11:
+	# print "Some data is there"
+	for line in k11:
+		try:
+			done_data.append(json.loads(line[:-2]))
+		except:
+			pass
+	for i in range(len(done_data)):
+		done_urls[done_data[i].keys()[0].encode('ascii','ignore')]=1
+else:
+	# print "No data yet"
+	pass
+k11.close()
+
+k12 = open('goodreads_following12.json','r')
+if k12:
+	# print "Some data is there"
+	for line in k12:
+		try:
+			done_data.append(json.loads(line[:-2]))
+		except:
+			pass
+	for i in range(len(done_data)):
+		done_urls[done_data[i].keys()[0].encode('ascii','ignore')]=1
+else:
+	# print "No data yet"
+	pass
+k12.close()
+
+k13 = open('goodreads_following13.json','r')
+if k13:
+	# print "Some data is there"
+	for line in k13:
+		try:
+			done_data.append(json.loads(line[:-2]))
+		except:
+			pass
+	for i in range(len(done_data)):
+		done_urls[done_data[i].keys()[0].encode('ascii','ignore')]=1
+else:
+	# print "No data yet"
+	pass
+k13.close()
+
+k14 = open('goodreads_following14.json','r')
+if k14:
+	# print "Some data is there"
+	for line in k14:
+		try:
+			done_data.append(json.loads(line[:-2]))
+		except:
+			pass
+	for i in range(len(done_data)):
+		done_urls[done_data[i].keys()[0].encode('ascii','ignore')]=1
+else:
+	# print "No data yet"
+	pass
+k14.close()
+
+k15 = open('goodreads_following15.json','r')
+if k15:
+	# print "Some data is there"
+	for line in k15:
+		try:
+			done_data.append(json.loads(line[:-2]))
+		except:
+			pass
+	for i in range(len(done_data)):
+		done_urls[done_data[i].keys()[0].encode('ascii','ignore')]=1
+else:
+	# print "No data yet"
+	pass
+k15.close()
+
+k1 = open('goodreads_following1.json','r')
+if k1:
+	# print "Some data is there"
+	for line in k1:
+		try:
+			done_data.append(json.loads(line[:-2]))
+		except:
+			pass
+	for i in range(len(done_data)):
+		done_urls[done_data[i].keys()[0].encode('ascii','ignore')]=1
+else:
+	# print "No data yet"
+	pass
+k1.close()
+
+
+##############################################################################################
+
+
+
+
 done_data =[]
 
 
