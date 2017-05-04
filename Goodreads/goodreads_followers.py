@@ -11,16 +11,40 @@ all_data, urlStr = [], {}
 
 f = open('user_reviews_fiction.json', 'r')
 for line in f:
-    all_data.append(json.loads(line[:-2]))
+    try:
+        all_data.append(json.loads(line[:-2]))
+    except:
+        pass
 f1 = open('user_reviews_nonfiction.json', 'r')
 for line in f1:
-    all_data.append(json.loads(line[:-2]))
+    try:
+        all_data.append(json.loads(line[:-2]))
+    except:
+        pass
 f2 = open('user_reviews_classic.json', 'r')
 for line in f2:
-    all_data.append(json.loads(line[:-2]))
+    try:
+        all_data.append(json.loads(line[:-2]))
+    except:
+        pass
 f3 = open('user_reviews_romance.json', 'r')
 for line in f3:
-    all_data.append(json.loads(line[:-2]))
+    try:
+        all_data.append(json.loads(line[:-2]))
+    except:
+        pass
+f4 = open('user_reviews_history.json', 'r')
+for line in f4:
+    try:
+        all_data.append(json.loads(line[:-2]))
+    except:
+        pass
+f5 = open('user_reviews_biography.json', 'r')
+for line in f5:
+    try:
+        all_data.append(json.loads(line[:-2]))
+    except:
+        pass
 
 for i in range(len(all_data)):
     key = all_data[i].keys()[0]
@@ -30,6 +54,8 @@ for i in range(len(all_data)):
 f1.close()
 f2.close()
 f3.close()
+f4.close()
+f5.close()
 f.close()
 
 all_data = []
@@ -164,7 +190,7 @@ count = 1
 
 print "Number of urls remaining", len(remain_list)
 
-for ele in tqdm(remain_list):
+for ele in tqdm(remain_list[:100000]):
 
     # print "**************************"
     # print "count",count
@@ -189,8 +215,8 @@ for ele in tqdm(remain_list):
             followers_list.append(a_link['href'])
         last_page = int(last_page_url[last_page_url.find('=') + 1:])
         # print "The last page is ", last_page
-        if last_page > 100:
-            last_page = 100
+        if last_page > 30:
+            last_page = 30
         for i in range(2, last_page + 1):
             next_page_url = goodreads_url + last_page_url[:last_page_url.find('=') + 1] + str(i)
             # print next_page_url
