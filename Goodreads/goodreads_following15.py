@@ -11,16 +11,40 @@ all_data, urlStr = [], {}
 
 f = open('user_reviews_fiction.json', 'r')
 for line in f:
-    all_data.append(json.loads(line[:-2]))
+    try:
+        all_data.append(json.loads(line[:-2]))
+    except:
+        pass
 f1 = open('user_reviews_nonfiction.json', 'r')
 for line in f1:
-    all_data.append(json.loads(line[:-2]))
+    try:
+        all_data.append(json.loads(line[:-2]))
+    except:
+        pass
 f2 = open('user_reviews_classic.json', 'r')
 for line in f2:
-    all_data.append(json.loads(line[:-2]))
+    try:
+        all_data.append(json.loads(line[:-2]))
+    except:
+        pass
 f3 = open('user_reviews_romance.json', 'r')
 for line in f3:
-    all_data.append(json.loads(line[:-2]))
+    try:
+        all_data.append(json.loads(line[:-2]))
+    except:
+        pass
+f4 = open('user_reviews_history.json', 'r')
+for line in f4:
+    try:
+        all_data.append(json.loads(line[:-2]))
+    except:
+        pass
+f5 = open('user_reviews_biography.json', 'r')
+for line in f5:
+    try:
+        all_data.append(json.loads(line[:-2]))
+    except:
+        pass
 
 for i in range(len(all_data)):
     key = all_data[i].keys()[0]
@@ -126,7 +150,6 @@ else:
     # print "No data yet"
     pass
 k5.close()
-
 
 #############################################################################################
 k6 = open('goodreads_following6.json','r')
@@ -280,23 +303,8 @@ else:
 	pass
 k15.close()
 
-k1 = open('goodreads_following1.json','r')
-if k1:
-	# print "Some data is there"
-	for line in k1:
-		try:
-			done_data.append(json.loads(line[:-2]))
-		except:
-			pass
-	for i in range(len(done_data)):
-		done_urls[done_data[i].keys()[0].encode('ascii','ignore')]=1
-else:
-	# print "No data yet"
-	pass
-k1.close()
-
-
 ##############################################################################################
+
 
 done_data = []
 
@@ -304,7 +312,7 @@ done_data = []
 def getDriver():
     # print "entered driver function"
     driver = webdriver.PhantomJS(
-        executable_path='C:\\Users\\skai2\\Downloads\\phantomjs-2.1.1-windows\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe')
+        executable_path='C:\\Users\\pracherl\\Downloads\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe')
     urlStr = "https://www.goodreads.com/user/sign_in"
 
     try:
@@ -331,7 +339,7 @@ for ele in tqdm(all_urls_list):
         continue
     remain_list.append(ele)
 
-for ele in tqdm(remain_list[25001:50000]):
+for ele in tqdm(remain_list[700001:]):
 
     # print "**************************"
     # print "count",count
